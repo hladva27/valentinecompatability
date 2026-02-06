@@ -1,38 +1,35 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Love Compatibility Checker 💘</title>
-<style>
-  :root{--pink:#ff2d6f;--pink2:#ff7aa8;--bg:#0b1020;--card:rgba(255,255,255,.08);--line:rgba(255,255,255,.18);}
-  body{
-    margin:0;font-family:Arial,sans-serif;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
-    background: radial-gradient(900px 700px at 20% 15%, rgba(255,45,111,.22), transparent 60%),
-                radial-gradient(900px 700px at 75% 25%, rgba(255,160,200,.20), transparent 60%),
-                var(--bg);
-  }
-  .card{
-    width:min(520px,92vw);padding:26px 22px;border-radius:26px;background:var(--card);
-    border:1px solid var(--line);box-shadow:0 22px 70px rgba(0,0,0,.35);backdrop-filter: blur(10px);
-    text-align:center;
-  }
-  h1{margin:0 0 6px;font-size:34px;letter-spacing:-.02em}
-  .grad{background:linear-gradient(135deg,var(--pink),var(--pink2));-webkit-background-clip:text;background-clip:text;color:transparent;}
-  p{margin:0 0 16px;color:rgba(255,255,255,.75)}
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
-  @media(max-width:680px){.grid{grid-template-columns:1fr}}
-  input{
-    width:100%;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.18);
-    background:rgba(0,0,0,.18);color:#fff;font-size:16px;outline:none;
-  }
-  input:focus{border-color:rgba(255,45,111,.55);box-shadow:0 0 0 4px rgba(255,45,111,.14)}
-  button{
-    margin-top:14px;width:100%;padding:12px 14px;border-radius:16px;border:0;cursor:pointer;
-    font-weight:900;font-size:15px;color:#0b1020;
-    background:linear-gradient(135deg,var(--pink),var(--pink2));
-    box-shadow:0 16px 34px rgba(255,45,111,.25);
-  }
-  .result{
-    display:none;margin-top:16px;padding:14px;border-radius:18px;
-    border:
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine Compatibility Checker</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        input { margin: 5px; }
+    </style>
+</head>
+<body>
+    <h1>Valentine Compatibility Checker</h1>
+    <p>Enter your names to see how compatible you are!</p>
+    <input type="text" id="name1" placeholder="Your Name" required>
+    <input type="text" id="name2" placeholder="Partner's Name" required>
+    <button onclick="checkCompatibility()">Check Compatibility</button>
+    <h2 id="result"></h2>
+
+    <script>
+        function checkCompatibility() {
+            var name1 = document.getElementById('name1').value;
+            var name2 = document.getElementById('name2').value;
+            if (name1 === '' || name2 === '') {
+                alert('Please enter both names!');
+                return;
+            }
+
+            var compatibility = Math.floor(Math.random() * 101);
+            var message = `${name1} and ${name2} are ${compatibility}% compatible!`;
+            document.getElementById('result').innerText = message;
+        }
+    </script>
+</body>
+</html>
