@@ -3,94 +3,103 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Love Compatibility 💘</title>
+<title>Love Compatibility Checker 💘</title>
 
 <style>
-body{
-  margin:0;
-  font-family: Arial, sans-serif;
-  background:#fff0f5;
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-.card{
-  background:white;
-  padding:30px;
-  border-radius:20px;
-  box-shadow:0 0 25px rgba(255,0,100,.2);
-  max-width:400px;
-  width:100%;
-  text-align:center;
-}
-h1{color:#ff2d6f}
-input{
-  width:100%;
-  padding:12px;
-  margin:8px 0;
-  border-radius:10px;
-  border:1px solid #ccc;
-  font-size:16px;
-}
-button{
-  margin-top:10px;
-  background:#ff2d6f;
-  color:white;
-  border:none;
-  padding:12px;
-  width:100%;
-  border-radius:10px;
-  font-size:16px;
-  cursor:pointer;
-}
-button:hover{opacity:.9}
-#result{
-  display:none;
-  margin-top:15px;
-  font-size:22px;
-  font-weight:bold;
-}
+  body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background:#fff0f5;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:24px;
+  }
+  .card{
+    background:white;
+    padding:30px;
+    border-radius:20px;
+    box-shadow:0 0 25px rgba(255,0,100,.18);
+    max-width:420px;
+    width:100%;
+    text-align:center;
+  }
+  h1{color:#ff2d6f; margin:0 0 8px}
+  p{margin:0 0 18px; color:#666}
+  input{
+    width:100%;
+    padding:12px;
+    margin:8px 0;
+    border-radius:10px;
+    border:1px solid #ccc;
+    font-size:16px;
+  }
+  button{
+    margin-top:10px;
+    background:#ff2d6f;
+    color:white;
+    border:none;
+    padding:12px;
+    width:100%;
+    border-radius:10px;
+    font-size:16px;
+    cursor:pointer;
+  }
+  button:hover{opacity:.92}
+  #result{
+    display:none;
+    margin-top:16px;
+    padding:14px;
+    border-radius:14px;
+    background:#fff7fb;
+    border:1px dashed rgba(255,45,111,.35);
+  }
+  .big{font-size:34px; font-weight:900; color:#ff2d6f; line-height:1}
+  .small{margin-top:8px; color:#777; font-size:13px}
 </style>
 </head>
 
 <body>
+  <div class="card">
+    <h1>Love Compatibility Checker 💘</h1>
+    <p>Enter names to reveal your match.</p>
 
-<div class="card">
-  <h1>Love Calculator 💘</h1>
+    <input id="name1" placeholder="His name" autocomplete="off">
+    <input id="name2" placeholder="Her name" autocomplete="off">
 
-  <input id="name1" placeholder="His name">
-  <input id="name2" placeholder="Her name">
+    <button onclick="calc()">Check Compatibility 💗</button>
 
-  <button onclick="calc()">Calculate 💗</button>
-
-  <div id="result"></div>
-</div>
+    <div id="result">
+      <div class="big" id="percent">100%</div>
+      <div class="small" id="line"></div>
+      <div class="small">Redirecting…</div>
+    </div>
+  </div>
 
 <script>
-function calc(){
+  function clean(s){ return (s||"").trim().replace(/\s+/g," "); }
 
-  let n1 = document.getElementById("name1").value.trim();
-  let n2 = document.getElementById("name2").value.trim();
+  function calc(){
+    const n1 = clean(document.getElementById("name1").value);
+    const n2 = clean(document.getElementById("name2").value);
 
-  if(!n1 || !n2){
-    alert("Enter both names 💕");
-    return;
+    if(!n1 || !n2){
+      alert("Enter both names 💕");
+      return;
+    }
+
+    localStorage.setItem("v1", n1);
+    localStorage.setItem("v2", n2);
+
+    document.getElementById("line").textContent = `${n1} + ${n2} = meant to be 💘`;
+    document.getElementById("result").style.display = "block";
+
+    setTimeout(() => {
+      window.location.href = "valentine.html";
+    }, 1400);
   }
-
-  localStorage.setItem("v1", n1);
-  localStorage.setItem("v2", n2);
-
-  let result = document.getElementById("result");
-
-  result.innerHTML = "100% MATCH 💖";
-  result.style.display = "block";
-
-  setTimeout(()=>{
-    window.location.href="valentine.html";
-  },1200);
-}
 </script>
-
 </body>
 </html>
+
