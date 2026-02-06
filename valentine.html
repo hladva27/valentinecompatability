@@ -3,122 +3,334 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Be My Valentine 💌</title>
+<title>One Question… 💌</title>
 
 <style>
-body{
-  margin:0;
-  font-family: Arial, sans-serif;
-  background:#fff7e6;
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  overflow:hidden;
-}
-.card{
-  background:white;
-  padding:35px;
-  border-radius:20px;
-  box-shadow:0 0 30px rgba(255,0,100,.2);
-  max-width:420px;
-  width:100%;
-  text-align:center;
-}
-h1{color:#ff2d6f}
-button{
-  padding:12px 20px;
-  margin:8px;
-  border-radius:12px;
-  border:none;
-  font-size:16px;
-  cursor:pointer;
-}
-#yes{
-  background:#ff2d6f;
-  color:white;
-}
-#no{
-  background:white;
-  border:1px solid #ff2d6f;
-  color:#ff2d6f;
-}
-#msg{
-  display:none;
-  margin-top:15px;
-  font-size:22px;
-  font-weight:bold;
-}
-.confetti span{
-  position:fixed;
-  top:-10px;
-  font-size:22px;
-  animation:fall 3s linear forwards;
-}
-@keyframes fall{
-  to{transform:translateY(110vh) rotate(360deg)}
-}
+  :root{ --pink:#ff2d6f; }
+  body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background:#fff7e6;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    padding:24px;
+  }
+  .card{
+    background:white;
+    padding:32px;
+    border-radius:20px;
+    box-shadow:0 0 30px rgba(255,0,100,.18);
+    max-width:520px;
+    width:100%;
+    text-align:center;
+    position:relative;
+    z-index:2;
+  }
+  h1{color:var(--pink); margin:0 0 8px}
+  .sub{color:#666; margin:0 0 12px}
+  .q{
+    font-size:26px;
+    font-weight:900;
+    margin:10px 0 14px;
+  }
+  .count{
+    font-size:18px;
+    font-weight:800;
+    color:#222;
+    background:#fff7fb;
+    border:1px dashed rgba(255,45,111,.35);
+    border-radius:14px;
+    padding:10px 12px;
+    display:inline-block;
+    margin-bottom:14px;
+  }
+  .row{display:flex; gap:12px; justify-content:center; flex-wrap:wrap}
+  button{
+    padding:12px 18px;
+    border-radius:14px;
+    border:none;
+    font-size:16px;
+    font-weight:800;
+    cursor:pointer;
+  }
+  #yes{
+    background:var(--pink);
+    color:white;
+    box-shadow:0 14px 30px rgba(255,45,111,.25);
+  }
+  #no{
+    background:white;
+    border:1px solid rgba(255,45,111,.55);
+    color:var(--pink);
+  }
+
+  /* Celebration screen */
+  .celebrate{
+    position:fixed;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    flex-direction:column;
+    background:radial-gradient(circle at 30% 20%, rgba(255,45,111,.18), transparent 50%),
+               radial-gradient(circle at 70% 30%, rgba(255,170,200,.22), transparent 55%),
+               #0b1020;
+    color:white;
+    z-index:5;
+    text-align:center;
+    padding:24px;
+  }
+  .celebrate h2{margin:0; font-size:44px; letter-spacing:-.02em}
+  .celebrate p{margin:10px 0 0; color:rgba(255,255,255,.8); font-size:16px; max-width:42ch}
+  .emojiRow{font-size:34px; margin-top:14px}
+  .hint{margin-top:10px; font-size:12px; color:rgba(255,255,255,.65)}
+
+  /* Fireworks canvas */
+  canvas{position:fixed; inset:0; z-index:4; display:none;}
+
+  /* Confetti emojis */
+  .confetti{position:fixed; inset:0; pointer-events:none; z-index:6; display:none;}
+  .confetti span{
+    position:absolute;
+    top:-20px;
+    font-size:20px;
+    animation:fall linear forwards;
+  }
+  @keyframes fall{
+    to{ transform: translateY(110vh) rotate(720deg); opacity:1; }
+  }
 </style>
 </head>
 
 <body>
 
-<div class="card" id="card">
+  <div class="card" id="card">
+    <h1>Just one question… 💌</h1>
+    <p class="sub" id="subtitle">Compatibility confirmed: 100% 💘</p>
 
-  <h1>One Question 💌</h1>
+    <div class="q" id="question">Do you want to be Hardik’s Valentine?</div>
 
-  <p id="names"></p>
+    <div class="count" id="countBox">
+      Answering in <span id="countNum">3</span>…
+    </div>
 
-  <h2>Will you be my Valentine? 💖</h2>
-
-  <button id="yes">YES 🥰</button>
-  <button id="no">No 🙈</button>
-
-  <div id="msg">
-    YAYYY!!! 🎉💘🥳<br>
-    Best Valentine Ever 💐
+    <div class="row">
+      <button id="yes">YES 💖</button>
+      <button id="no">No 🙈</button>
+    </div>
   </div>
 
-</div>
+  <canvas id="fw"></canvas>
+  <div class="confetti" id="confetti"></div>
 
-<div class="confetti" id="confetti"></div>
+  <div class="celebrate" id="celebrate">
+    <h2>YAYYYYY!!! 💘</h2>
+    <p id="celebrateText">You just made Hardik the happiest guy ever.</p>
+    <div class="emojiRow">🎆🎉🥳💐🍫🌹✨</div>
+    <div class="hint">Screenshot this 😄</div>
+  </div>
 
 <script>
+  // --- Pull names from first page ---
+  const n1 = localStorage.getItem("v1") || "Hardik";
+  const n2 = localStorage.getItem("v2") || "my love";
 
-let n1 = localStorage.getItem("v1") || "Hardik";
-let n2 = localStorage.getItem("v2") || "My Love";
+  document.getElementById("subtitle").textContent = `Compatibility confirmed: ${n1} + ${n2} = 100% 💘`;
+  document.getElementById("question").textContent = `Do you want to be ${n1}’s Valentine?`;
 
-document.getElementById("names").innerHTML =
-  n1 + " ❤️ " + n2 + " = Perfect Match";
+  const noBtn = document.getElementById("no");
+  const yesBtn = document.getElementById("yes");
+  const countNum = document.getElementById("countNum");
+  const countBox = document.getElementById("countBox");
 
-document.getElementById("yes").onclick = function(){
-  document.getElementById("msg").style.display="block";
-  confetti();
-}
+  // --- Make NO run away during countdown ---
+  function runAway(){
+    // keep it on-screen but hard to catch
+    const pad = 20;
+    const w = 110, h = 52;
+    const x = pad + Math.random() * (window.innerWidth - w - pad*2);
+    const y = pad + Math.random() * (window.innerHeight - h - pad*2);
 
-document.getElementById("no").onclick = function(){
-  alert("Wrong button 😄 Try again!");
-}
-
-function confetti(){
-
-  let box = document.getElementById("confetti");
-  box.innerHTML="";
-
-  let emojis=["🎉","💖","🥳","💘","✨","🌹","😍","💐"];
-
-  for(let i=0;i<60;i++){
-
-    let s=document.createElement("span");
-    s.innerHTML=emojis[Math.floor(Math.random()*emojis.length)];
-    s.style.left=Math.random()*100+"vw";
-    s.style.animationDuration=(2+Math.random()*2)+"s";
-
-    box.appendChild(s);
+    noBtn.style.position = "fixed";
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
   }
-}
 
+  // Bonus: also run away on hover/tap
+  noBtn.addEventListener("mouseover", runAway);
+  noBtn.addEventListener("touchstart", (e)=>{ e.preventDefault(); runAway(); }, {passive:false});
+
+  // --- Countdown 3..2..1, then remove NO ---
+  let t = 3;
+  runAway(); // start it moving immediately
+
+  const timer = setInterval(() => {
+    t -= 1;
+    if(t >= 1){
+      countNum.textContent = String(t);
+      runAway();
+    } else {
+      clearInterval(timer);
+      countBox.textContent = "Choose wisely 😄";
+      // remove NO so only YES remains
+      noBtn.style.display = "none";
+      // center YES
+      yesBtn.style.minWidth = "220px";
+    }
+  }, 1000);
+
+  // --- YES triggers celebration + fireworks ---
+  yesBtn.addEventListener("click", () => {
+    startCelebration();
+  });
+
+  function startCelebration(){
+    document.getElementById("card").style.display = "none";
+    document.getElementById("celebrate").style.display = "flex";
+    document.getElementById("fw").style.display = "block";
+    document.getElementById("confetti").style.display = "block";
+    launchConfetti();
+    startFireworks();
+
+    // Personalize the text
+    document.getElementById("celebrateText").textContent =
+      `${n2} said YES 😭❤️ Happy Valentine’s, ${n2}!`;
+  }
+
+  // --- Confetti emojis ---
+  function launchConfetti(){
+    const box = document.getElementById("confetti");
+    box.innerHTML = "";
+    const emojis = ["🎉","🥳","💖","💘","💐","🍫","✨","😍","🌹","🎆"];
+    const count = 80;
+
+    for(let i=0;i<count;i++){
+      const s = document.createElement("span");
+      s.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+      s.style.left = (Math.random()*100) + "vw";
+      s.style.animationDuration = (2.8 + Math.random()*2.5) + "s";
+      s.style.animationDelay = (Math.random()*0.25) + "s";
+      box.appendChild(s);
+    }
+
+    // Keep it going lightly
+    setInterval(() => {
+      const s = document.createElement("span");
+      s.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+      s.style.left = (Math.random()*100) + "vw";
+      s.style.animationDuration = (2.8 + Math.random()*2.5) + "s";
+      box.appendChild(s);
+      setTimeout(()=>s.remove(), 6000);
+    }, 160);
+  }
+
+  // --- Fireworks (canvas particles) ---
+  function startFireworks(){
+    const canvas = document.getElementById("fw");
+    const ctx = canvas.getContext("2d");
+
+    function resize(){
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    const rockets = [];
+    const sparks = [];
+
+    function rand(min,max){ return min + Math.random()*(max-min); }
+
+    function launchRocket(){
+      rockets.push({
+        x: rand(0, canvas.width),
+        y: canvas.height + 10,
+        vx: rand(-1.2, 1.2),
+        vy: rand(-9.5, -12.5),
+        explodeY: rand(canvas.height*0.15, canvas.height*0.45),
+        life: 0
+      });
+    }
+
+    function explode(x,y){
+      const count = Math.floor(rand(40, 80));
+      for(let i=0;i<count;i++){
+        const a = rand(0, Math.PI*2);
+        const sp = rand(1.5, 5.8);
+        sparks.push({
+          x, y,
+          vx: Math.cos(a)*sp,
+          vy: Math.sin(a)*sp,
+          g: 0.08,
+          life: rand(40, 75),
+          age: 0
+        });
+      }
+    }
+
+    let lastLaunch = 0;
+
+    function tick(ts){
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+
+      // launch rockets periodically
+      if(ts - lastLaunch > 380){
+        launchRocket();
+        lastLaunch = ts;
+      }
+
+      // rockets
+      for(let i=rockets.length-1;i>=0;i--){
+        const r = rockets[i];
+        r.life++;
+        r.x += r.vx;
+        r.y += r.vy;
+        r.vy += 0.08;
+
+        // draw rocket
+        ctx.globalAlpha = 0.9;
+        ctx.fillStyle = "white";
+        ctx.fillRect(r.x, r.y, 2, 6);
+
+        if(r.y <= r.explodeY || r.life > 200){
+          explode(r.x, r.y);
+          rockets.splice(i,1);
+        }
+      }
+
+      // sparks
+      for(let i=sparks.length-1;i>=0;i--){
+        const p = sparks[i];
+        p.age++;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += p.g;
+        p.vx *= 0.985;
+        p.vy *= 0.985;
+
+        const alpha = Math.max(0, 1 - (p.age / p.life));
+        ctx.globalAlpha = alpha;
+
+        // simple gradient-ish by varying brightness
+        const bright = Math.floor(180 + 75*Math.sin(p.age*0.12));
+        ctx.fillStyle = `rgb(${bright},${bright},255)`;
+        ctx.fillRect(p.x, p.y, 2, 2);
+
+        if(p.age >= p.life){
+          sparks.splice(i,1);
+        }
+      }
+
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+  }
 </script>
-
 </body>
 </html>
+
