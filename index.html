@@ -4,102 +4,35 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Love Compatibility Checker 💘</title>
-
 <style>
+  :root{--pink:#ff2d6f;--pink2:#ff7aa8;--bg:#0b1020;--card:rgba(255,255,255,.08);--line:rgba(255,255,255,.18);}
   body{
-    margin:0;
-    font-family: Arial, sans-serif;
-    background:#fff0f5;
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:24px;
+    margin:0;font-family:Arial,sans-serif;color:#fff;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;
+    background: radial-gradient(900px 700px at 20% 15%, rgba(255,45,111,.22), transparent 60%),
+                radial-gradient(900px 700px at 75% 25%, rgba(255,160,200,.20), transparent 60%),
+                var(--bg);
   }
   .card{
-    background:white;
-    padding:30px;
-    border-radius:20px;
-    box-shadow:0 0 25px rgba(255,0,100,.18);
-    max-width:420px;
-    width:100%;
+    width:min(520px,92vw);padding:26px 22px;border-radius:26px;background:var(--card);
+    border:1px solid var(--line);box-shadow:0 22px 70px rgba(0,0,0,.35);backdrop-filter: blur(10px);
     text-align:center;
   }
-  h1{color:#ff2d6f; margin:0 0 8px}
-  p{margin:0 0 18px; color:#666}
+  h1{margin:0 0 6px;font-size:34px;letter-spacing:-.02em}
+  .grad{background:linear-gradient(135deg,var(--pink),var(--pink2));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  p{margin:0 0 16px;color:rgba(255,255,255,.75)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+  @media(max-width:680px){.grid{grid-template-columns:1fr}}
   input{
-    width:100%;
-    padding:12px;
-    margin:8px 0;
-    border-radius:10px;
-    border:1px solid #ccc;
-    font-size:16px;
+    width:100%;padding:12px 14px;border-radius:16px;border:1px solid rgba(255,255,255,.18);
+    background:rgba(0,0,0,.18);color:#fff;font-size:16px;outline:none;
   }
+  input:focus{border-color:rgba(255,45,111,.55);box-shadow:0 0 0 4px rgba(255,45,111,.14)}
   button{
-    margin-top:10px;
-    background:#ff2d6f;
-    color:white;
-    border:none;
-    padding:12px;
-    width:100%;
-    border-radius:10px;
-    font-size:16px;
-    cursor:pointer;
+    margin-top:14px;width:100%;padding:12px 14px;border-radius:16px;border:0;cursor:pointer;
+    font-weight:900;font-size:15px;color:#0b1020;
+    background:linear-gradient(135deg,var(--pink),var(--pink2));
+    box-shadow:0 16px 34px rgba(255,45,111,.25);
   }
-  button:hover{opacity:.92}
-  #result{
-    display:none;
-    margin-top:16px;
-    padding:14px;
-    border-radius:14px;
-    background:#fff7fb;
-    border:1px dashed rgba(255,45,111,.35);
-  }
-  .big{font-size:34px; font-weight:900; color:#ff2d6f; line-height:1}
-  .small{margin-top:8px; color:#777; font-size:13px}
-</style>
-</head>
-
-<body>
-  <div class="card">
-    <h1>Love Compatibility Checker 💘</h1>
-    <p>Enter names to reveal your match.</p>
-
-    <input id="name1" placeholder="His name" autocomplete="off">
-    <input id="name2" placeholder="Her name" autocomplete="off">
-
-    <button onclick="calc()">Check Compatibility 💗</button>
-
-    <div id="result">
-      <div class="big" id="percent">100%</div>
-      <div class="small" id="line"></div>
-      <div class="small">Redirecting…</div>
-    </div>
-  </div>
-
-<script>
-  function clean(s){ return (s||"").trim().replace(/\s+/g," "); }
-
-  function calc(){
-    const n1 = clean(document.getElementById("name1").value);
-    const n2 = clean(document.getElementById("name2").value);
-
-    if(!n1 || !n2){
-      alert("Enter both names 💕");
-      return;
-    }
-
-    localStorage.setItem("v1", n1);
-    localStorage.setItem("v2", n2);
-
-    document.getElementById("line").textContent = `${n1} + ${n2} = meant to be 💘`;
-    document.getElementById("result").style.display = "block";
-
-    setTimeout(() => {
-      window.location.href = "valentine.html";
-    }, 1400);
-  }
-</script>
-</body>
-</html>
-
+  .result{
+    display:none;margin-top:16px;padding:14px;border-radius:18px;
+    border:
