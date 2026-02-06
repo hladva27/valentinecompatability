@@ -4,114 +4,253 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>IT’S A YES 💘</title>
+
 <style>
-  :root{--pink:#ff2d6f;--pink2:#ff7aa8;}
   body{
-    margin:0;font-family:Arial,sans-serif;min-height:100vh;overflow:hidden;color:#fff;
-    background: radial-gradient(900px 700px at 20% 15%, rgba(255,45,111,.22), transparent 60%),
-                radial-gradient(900px 700px at 75% 25%, rgba(255,160,200,.18), transparent 60%),
-                #0b1020;
+    margin:0;
+    font-family: Arial, sans-serif;
+    background:#0b1020;
+    color:white;
+    min-height:100vh;
+    overflow:hidden;
   }
+
   .center{
-    position:fixed;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:26px;z-index:3;
+    position:fixed;
+    inset:0;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:24px;
+    z-index:3;
   }
-  h1{margin:0;font-size:54px;letter-spacing:-.02em;text-shadow:0 18px 70px rgba(0,0,0,.5)}
-  p{margin:12px 0 0;max-width:52ch;color:rgba(255,255,255,.86);font-size:16px}
-  .grad{background:linear-gradient(135deg,var(--pink),var(--pink2));-webkit-background-clip:text;background-clip:text;color:transparent;}
-  .row{font-size:38px;margin-top:14px}
-  .hint{margin-top:10px;font-size:12px;color:rgba(255,255,255,.65)}
-  canvas{position:fixed;inset:0;z-index:1}
-  .confetti,.hearts{position:fixed;inset:0;pointer-events:none;z-index:2}
-  .confetti span{position:absolute;top:-20px;font-size:20px;animation:fall linear forwards}
-  @keyframes fall{to{transform:translateY(110vh) rotate(720deg);opacity:1}}
-  .hearts span{position:absolute;bottom:-30px;font-size:18px;opacity:.9;animation:floatUp linear forwards}
-  @keyframes floatUp{to{transform:translateY(-120vh) translateX(40px);opacity:0}}
+
+  h1{
+    margin:0;
+    font-size:52px;
+    text-shadow:0 0 40px rgba(255,45,111,.6);
+  }
+
+  p{
+    margin:12px 0 0;
+    max-width:500px;
+    color:#ddd;
+    font-size:16px;
+  }
+
+  .row{
+    font-size:36px;
+    margin-top:16px;
+  }
+
+  .hint{
+    margin-top:10px;
+    font-size:12px;
+    color:#aaa;
+  }
+
+  canvas{
+    position:fixed;
+    inset:0;
+    z-index:1;
+  }
+
+  .confetti,.hearts{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:2;
+  }
+
+  .confetti span{
+    position:absolute;
+    top:-20px;
+    font-size:20px;
+    animation:fall linear forwards;
+  }
+
+  @keyframes fall{
+    to{transform:translateY(110vh) rotate(720deg);opacity:1}
+  }
+
+  .hearts span{
+    position:absolute;
+    bottom:-30px;
+    font-size:18px;
+    opacity:.9;
+    animation:floatUp linear forwards;
+  }
+
+  @keyframes floatUp{
+    to{transform:translateY(-120vh) translateX(40px);opacity:0}
+  }
 </style>
 </head>
-<body>
-  <canvas id="fw"></canvas>
-  <div class="confetti" id="confetti"></div>
-  <div class="hearts" id="hearts"></div>
 
-  <div class="center">
-    <h1><span class="grad">IT’S A YES!!!</span> 💘</h1>
-    <p id="msg">Best Valentine ever. Screenshot this and send it to Hardik 😄</p>
-    <div class="row">🎆🎉🥳💐🍫🌹✨</div>
-    <div class="hint">You just got proposed to via a website. That’s elite.</div>
-  </div>
+<body>
+
+<canvas id="fw"></canvas>
+
+<div class="confetti" id="confetti"></div>
+<div class="hearts" id="hearts"></div>
+
+<div class="center">
+  <h1>IT’S A YES!!! 💘</h1>
+  <p id="msg">Best Valentine ever ❤️</p>
+  <div class="row">🎆🎉🥳💐🍫🌹✨</div>
+  <div class="hint">Screenshot this 😄</div>
+</div>
 
 <script>
-  const n1 = localStorage.getItem("v1") || "Hardik";
-  const n2 = localStorage.getItem("v2") || "my love";
-  document.getElementById("msg").textContent = `${n2} said YES 😭❤️ Happy Valentine’s, ${n2}! — ${n1}`;
 
-  // Confetti
-  const conf = document.getElementById("confetti");
-  const emojis = ["🎉","🥳","💖","💘","💐","🍫","✨","😍","🌹","🎆"];
-  for(let i=0;i<120;i++){
-    const s = document.createElement("span");
-    s.textContent = emojis[Math.floor(Math.random()*emojis.length)];
-    s.style.left = (Math.random()*100) + "vw";
-    s.style.animationDuration = (2.6 + Math.random()*2.8) + "s";
-    s.style.animationDelay = (Math.random()*0.25) + "s";
-    conf.appendChild(s);
+const n1 = localStorage.getItem("v1") || "Hardik";
+const n2 = localStorage.getItem("v2") || "my love";
+
+document.getElementById("msg").textContent =
+  `${n2} said YES 😭❤️ Happy Valentine’s, ${n2}! — ${n1}`;
+
+
+// Confetti
+const conf = document.getElementById("confetti");
+const emojis = ["🎉","🥳","💖","💘","💐","🍫","✨","😍","🌹","🎆"];
+
+for(let i=0;i<120;i++){
+  const s = document.createElement("span");
+  s.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+  s.style.left = (Math.random()*100) + "vw";
+  s.style.animationDuration = (2.6 + Math.random()*2.8) + "s";
+  s.style.animationDelay = (Math.random()*0.25) + "s";
+  conf.appendChild(s);
+}
+
+
+// Floating hearts
+const heartsBox = document.getElementById("hearts");
+const hearts = ["💗","💖","💘","💕","❤️"];
+
+setInterval(() => {
+
+  const s = document.createElement("span");
+  s.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+  s.style.left = (Math.random()*100) + "vw";
+  s.style.animationDuration = (3.5 + Math.random()*2.8) + "s";
+
+  heartsBox.appendChild(s);
+
+  setTimeout(()=>s.remove(), 7000);
+
+}, 140);
+
+
+// Fireworks
+const canvas = document.getElementById("fw");
+const ctx = canvas.getContext("2d");
+
+function resize(){
+  canvas.width = innerWidth;
+  canvas.height = innerHeight;
+}
+
+addEventListener("resize", resize);
+resize();
+
+const rockets=[], sparks=[];
+const rand=(a,b)=>a+Math.random()*(b-a);
+
+function launch(){
+  rockets.push({
+    x:rand(0,canvas.width),
+    y:canvas.height+10,
+    vx:rand(-1.2,1.2),
+    vy:rand(-9.5,-12.8),
+    explodeY:rand(canvas.height*.12,canvas.height*.42),
+    life:0
+  });
+}
+
+function explode(x,y){
+
+  const count=Math.floor(rand(55,95));
+
+  for(let i=0;i<count;i++){
+
+    const a=rand(0,Math.PI*2);
+    const sp=rand(1.6,6.4);
+
+    sparks.push({
+      x,y,
+      vx:Math.cos(a)*sp,
+      vy:Math.sin(a)*sp,
+      g:0.07,
+      life:rand(42,84),
+      age:0
+    });
+  }
+}
+
+let last=0;
+
+function tick(ts){
+
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+
+  if(ts-last>330){
+    launch();
+    last=ts;
   }
 
-  // Hearts
-  const heartsBox = document.getElementById("hearts");
-  const hearts = ["💗","💖","💘","💕","❤️"];
-  setInterval(() => {
-    const s = document.createElement("span");
-    s.textContent = hearts[Math.floor(Math.random()*hearts.length)];
-    s.style.left = (Math.random()*100) + "vw";
-    s.style.animationDuration = (3.5 + Math.random()*2.8) + "s";
-    heartsBox.appendChild(s);
-    setTimeout(()=>s.remove(), 7000);
-  }, 140);
+  // Rockets
+  for(let i=rockets.length-1;i>=0;i--){
 
-  // Fireworks
-  const canvas = document.getElementById("fw");
-  const ctx = canvas.getContext("2d");
-  function resize(){ canvas.width = innerWidth; canvas.height = innerHeight; }
-  addEventListener("resize", resize); resize();
+    const r=rockets[i];
 
-  const rockets=[], sparks=[];
-  const rand=(a,b)=>a+Math.random()*(b-a);
+    r.life++;
+    r.x+=r.vx;
+    r.y+=r.vy;
+    r.vy+=0.08;
 
-  function launch(){
-    rockets.push({x:rand(0,canvas.width),y:canvas.height+10,vx:rand(-1.2,1.2),vy:rand(-9.5,-12.8),explodeY:rand(canvas.height*.12,canvas.height*.42),life:0});
-  }
-  function explode(x,y){
-    const count=Math.floor(rand(55,95));
-    for(let i=0;i<count;i++){
-      const a=rand(0,Math.PI*2), sp=rand(1.6,6.4);
-      sparks.push({x,y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,g:0.07,life:rand(42,84),age:0});
+    ctx.globalAlpha=0.95;
+    ctx.fillStyle="white";
+    ctx.fillRect(r.x,r.y,2,7);
+
+    if(r.y<=r.explodeY || r.life>210){
+      explode(r.x,r.y);
+      rockets.splice(i,1);
     }
   }
 
-  let last=0;
-  function tick(ts){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    if(ts-last>330){ launch(); last=ts; }
+  // Sparks
+  for(let i=sparks.length-1;i>=0;i--){
 
-    for(let i=rockets.length-1;i>=0;i--){
-      const r=rockets[i]; r.life++; r.x+=r.vx; r.y+=r.vy; r.vy+=0.08;
-      ctx.globalAlpha=0.95; ctx.fillStyle="white"; ctx.fillRect(r.x,r.y,2,7);
-      if(r.y<=r.explodeY || r.life>210){ explode(r.x,r.y); rockets.splice(i,1); }
-    }
+    const p=sparks[i];
 
-    for(let i=sparks.length-1;i>=0;i--){
-      const p=sparks[i]; p.age++; p.x+=p.vx; p.y+=p.vy; p.vy+=p.g; p.vx*=0.985; p.vy*=0.985;
-      const alpha=Math.max(0,1-(p.age/p.life)); ctx.globalAlpha=alpha;
-      const bright=Math.floor(170+85*Math.sin(p.age*0.12));
-      ctx.fillStyle=`rgb(${bright},${bright},255)`; ctx.fillRect(p.x,p.y,2,2);
-      if(p.age>=p.life) sparks.splice(i,1);
-    }
+    p.age++;
+    p.x+=p.vx;
+    p.y+=p.vy;
+    p.vy+=p.g;
+    p.vx*=0.985;
+    p.vy*=0.985;
 
-    ctx.globalAlpha=1;
-    requestAnimationFrame(tick);
+    const alpha=Math.max(0,1-(p.age/p.life));
+    ctx.globalAlpha=alpha;
+
+    const bright=Math.floor(170+85*Math.sin(p.age*0.12));
+
+    ctx.fillStyle=`rgb(${bright},${bright},255)`;
+    ctx.fillRect(p.x,p.y,2,2);
+
+    if(p.age>=p.life) sparks.splice(i,1);
   }
+
+  ctx.globalAlpha=1;
   requestAnimationFrame(tick);
+}
+
+requestAnimationFrame(tick);
+
 </script>
+
 </body>
 </html>
