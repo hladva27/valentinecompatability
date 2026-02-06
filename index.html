@@ -1,35 +1,132 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Valentine Compatibility Checker</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        input { margin: 5px; }
-    </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Love Compatibility Checker 💘</title>
+
+<style>
+  body{
+    margin:0;
+    font-family: Arial, sans-serif;
+    background:#fff0f5;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:24px;
+  }
+
+  .card{
+    background:white;
+    padding:30px;
+    border-radius:22px;
+    box-shadow:0 0 30px rgba(255,0,100,.2);
+    max-width:420px;
+    width:100%;
+    text-align:center;
+  }
+
+  h1{color:#ff2d6f;margin:0 0 8px}
+  p{color:#666;margin:0 0 18px}
+
+  input{
+    width:100%;
+    padding:12px;
+    margin:8px 0;
+    border-radius:12px;
+    border:1px solid #ccc;
+    font-size:16px;
+  }
+
+  button{
+    margin-top:10px;
+    background:#ff2d6f;
+    color:white;
+    border:none;
+    padding:12px;
+    width:100%;
+    border-radius:12px;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
+  }
+
+  button:hover{opacity:.9}
+
+  #result{
+    display:none;
+    margin-top:16px;
+    padding:14px;
+    border-radius:14px;
+    background:#fff7fb;
+    border:1px dashed #ff2d6f;
+  }
+
+  .big{
+    font-size:36px;
+    font-weight:900;
+    color:#ff2d6f;
+  }
+
+  .small{
+    margin-top:8px;
+    color:#777;
+    font-size:13px;
+  }
+</style>
 </head>
+
 <body>
-    <h1>Valentine Compatibility Checker</h1>
-    <p>Enter your names to see how compatible you are!</p>
-    <input type="text" id="name1" placeholder="Your Name" required>
-    <input type="text" id="name2" placeholder="Partner's Name" required>
-    <button onclick="checkCompatibility()">Check Compatibility</button>
-    <h2 id="result"></h2>
 
-    <script>
-        function checkCompatibility() {
-            var name1 = document.getElementById('name1').value;
-            var name2 = document.getElementById('name2').value;
-            if (name1 === '' || name2 === '') {
-                alert('Please enter both names!');
-                return;
-            }
+<div class="card">
 
-            var compatibility = Math.floor(Math.random() * 101);
-            var message = `${name1} and ${name2} are ${compatibility}% compatible!`;
-            document.getElementById('result').innerText = message;
-        }
-    </script>
+  <h1>Love Compatibility Checker 💘</h1>
+  <p>Enter two names to test your match.</p>
+
+  <input id="name1" placeholder="His name">
+  <input id="name2" placeholder="Her name">
+
+  <button onclick="check()">Check 💗</button>
+
+  <div id="result">
+    <div class="big">100%</div>
+    <div class="small" id="line"></div>
+    <div class="small">Redirecting…</div>
+  </div>
+
+</div>
+
+<script>
+
+function clean(t){
+  return (t || "").trim().replace(/\s+/g," ");
+}
+
+function check(){
+
+  const n1 = clean(document.getElementById("name1").value);
+  const n2 = clean(document.getElementById("name2").value);
+
+  if(!n1 || !n2){
+    alert("Enter both names 💕");
+    return;
+  }
+
+  localStorage.setItem("v1", n1);
+  localStorage.setItem("v2", n2);
+
+  document.getElementById("line").textContent =
+    n1 + " + " + n2 + " = meant to be 💘";
+
+  document.getElementById("result").style.display = "block";
+
+  setTimeout(() => {
+    window.location.href = "analysis.html";
+  }, 1500);
+}
+
+</script>
+
 </body>
 </html>
