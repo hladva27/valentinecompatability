@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Be My Valentine 💌</title>
+
+<style>
+body{
+  margin:0;
+  font-family: Arial, sans-serif;
+  background:#fff7e6;
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  overflow:hidden;
+}
+.card{
+  background:white;
+  padding:35px;
+  border-radius:20px;
+  box-shadow:0 0 30px rgba(255,0,100,.2);
+  max-width:420px;
+  width:100%;
+  text-align:center;
+}
+h1{color:#ff2d6f}
+button{
+  padding:12px 20px;
+  margin:8px;
+  border-radius:12px;
+  border:none;
+  font-size:16px;
+  cursor:pointer;
+}
+#yes{
+  background:#ff2d6f;
+  color:white;
+}
+#no{
+  background:white;
+  border:1px solid #ff2d6f;
+  color:#ff2d6f;
+}
+#msg{
+  display:none;
+  margin-top:15px;
+  font-size:22px;
+  font-weight:bold;
+}
+.confetti span{
+  position:fixed;
+  top:-10px;
+  font-size:22px;
+  animation:fall 3s linear forwards;
+}
+@keyframes fall{
+  to{transform:translateY(110vh) rotate(360deg)}
+}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="card">
+
+  <h1>One Question 💌</h1>
+
+  <p id="names"></p>
+
+  <h2>Will you be my Valentine? 💖</h2>
+
+  <button id="yes">YES 🥰</button>
+  <button id="no">No 🙈</button>
+
+  <div id="msg">
+    YAYYY!!! 🎉💘🥳<br>
+    Best Valentine Ever 💐
+  </div>
+
+</div>
+
+<div class="confetti" id="confetti"></div>
+
+<script>
+
+let n1 = localStorage.getItem("v1") || "Hardik";
+let n2 = localStorage.getItem("v2") || "My Love";
+
+document.getElementById("names").innerHTML =
+  n1 + " ❤️ " + n2 + " = Perfect Match";
+
+document.getElementById("yes").onclick = function(){
+  document.getElementById("msg").style.display="block";
+  confetti();
+}
+
+document.getElementById("no").onclick = function(){
+  alert("Wrong button 😄 Try again!");
+}
+
+function confetti(){
+
+  let box = document.getElementById("confetti");
+  box.innerHTML="";
+
+  let emojis=["🎉","💖","🥳","💘","✨","🌹","😍","💐"];
+
+  for(let i=0;i<60;i++){
+
+    let s=document.createElement("span");
+    s.innerHTML=emojis[Math.floor(Math.random()*emojis.length)];
+    s.style.left=Math.random()*100+"vw";
+    s.style.animationDuration=(2+Math.random()*2)+"s";
+
+    box.appendChild(s);
+  }
+}
+
+</script>
+
+</body>
+</html>
