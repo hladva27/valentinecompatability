@@ -6,175 +6,234 @@
 <title>One Question 💌</title>
 
 <style>
+  :root{--pink:#ff2d6f;--pink2:#ff7aa8;--bg:#0b1020;}
   body{
-    margin:0;
-    font-family: Arial, sans-serif;
-    background:#0b1020;
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    overflow:hidden;
+    margin:0;font-family:Arial,sans-serif;min-height:100vh;overflow:hidden;color:#fff;
+    background:
+      radial-gradient(900px 700px at 20% 15%, rgba(255,45,111,.22), transparent 60%),
+      radial-gradient(900px 700px at 75% 25%, rgba(255,160,200,.18), transparent 60%),
+      var(--bg);
+  }
+
+  /* montage layer */
+  .montage{
+    position:fixed; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    pointer-events:none;
+    z-index:1;
+  }
+  .montage-inner{
+    position:relative;
+    width:min(1100px, 96vw);
+    height:min(720px, 76vh);
+  }
+  .photo{
+    position:absolute;
+    border-radius:18px;
+    border:3px solid rgba(255,255,255,.16);
+    box-shadow:0 26px 90px rgba(0,0,0,.60);
+    object-fit:cover;
+    opacity:0;
+    transform: translateY(-80vh) rotate(-14deg) scale(1.18);
+    animation: slam 650ms cubic-bezier(.2,1.4,.25,1) forwards;
+    will-change: transform, opacity;
+  }
+  @keyframes slam{
+    0%{opacity:0; transform: translateY(-80vh) rotate(var(--rStart)) scale(1.22);}
+    60%{opacity:1; transform: translateY(10px) rotate(var(--rMid)) scale(1.03);}
+    78%{transform: translateY(-7px) rotate(var(--rEnd)) scale(1.00);}
+    100%{opacity:1; transform: translateY(0) rotate(var(--rEnd)) scale(1.00);}
+  }
+
+  /* impact shake (tiny, not nauseating) */
+  body.shake{animation: shake 160ms ease-in-out;}
+  @keyframes shake{
+    0%,100%{transform:translateX(0)}
+    25%{transform:translateX(-6px)}
+    50%{transform:translateX(6px)}
+    75%{transform:translateX(-4px)}
+  }
+
+  /* question overlay */
+  .overlay{
+    position:fixed; inset:0;
+    display:flex; align-items:center; justify-content:center;
     padding:24px;
-    color:white;
+    z-index:3;
+    pointer-events:auto;
   }
-
   .card{
-    background:rgba(255,255,255,.08);
-    padding:32px;
-    border-radius:24px;
-    box-shadow:0 0 50px rgba(0,0,0,.5);
-    max-width:520px;
-    width:100%;
+    width:min(650px,92vw);
     text-align:center;
-    border:1px solid rgba(255,255,255,.18);
-  }
+    padding:28px 22px;
+    border-radius:26px;
+    background:rgba(0,0,0,.66);
+    border:1px solid rgba(255,255,255,.20);
+    box-shadow:0 22px 70px rgba(0,0,0,.60);
+    backdrop-filter: blur(10px);
 
-  .sub{
-    color:#ccc;
-    margin:0 0 10px;
+    opacity:0;
+    transform: translateY(10px) scale(.98);
+    transition: opacity .45s ease, transform .45s ease;
   }
+  .card.show{opacity:1; transform: translateY(0) scale(1);}
 
-  .q{
-    font-size:30px;
-    font-weight:900;
-    margin:10px 0 16px;
-  }
-
+  .sub{margin:0 0 10px;color:rgba(255,255,255,.86)}
+  .q{font-size:32px;font-weight:1000;line-height:1.12;margin:10px 0 14px;letter-spacing:-.02em}
   .q span{
-    color:#ff2d6f;
+    background:linear-gradient(135deg,var(--pink),var(--pink2));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
   }
-
   .count{
-    display:inline-block;
-    padding:10px 14px;
-    border-radius:999px;
-    background:rgba(255,255,255,.1);
-    border:1px dashed rgba(255,255,255,.3);
-    margin-bottom:16px;
-    font-weight:800;
+    display:inline-block;padding:10px 14px;border-radius:999px;
+    background:rgba(255,255,255,.12);border:1px dashed rgba(255,255,255,.28);
+    font-weight:900;margin-bottom:16px
   }
-
-  .row{
-    display:flex;
-    gap:12px;
-    justify-content:center;
-    flex-wrap:wrap;
-  }
-
+  .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
   button{
-    padding:12px 18px;
-    border-radius:14px;
-    border:none;
-    font-size:16px;
-    font-weight:900;
-    cursor:pointer;
-    min-width:140px;
+    padding:12px 18px;border-radius:16px;border:0;font-size:16px;font-weight:1000;cursor:pointer;min-width:150px
   }
-
-  #yes{
-    background:#ff2d6f;
-    color:white;
-    box-shadow:0 0 20px rgba(255,45,111,.4);
-  }
-
-  #no{
-    background:white;
-    color:#ff2d6f;
-  }
+  #yes{background:linear-gradient(135deg,var(--pink),var(--pink2));color:#0b1020;box-shadow:0 16px 34px rgba(255,45,111,.25)}
+  #no{background:rgba(255,255,255,.95);color:var(--pink)}
 </style>
 </head>
 
 <body>
 
-<div class="card" id="card">
+<div class="montage">
+  <div class="montage-inner" id="montage"></div>
+</div>
 
-  <p class="sub" id="subtitle">Compatibility confirmed: 100% 💘</p>
-
-  <div class="q" id="question">
-    Do you want to be <span>Hardik’s</span> Valentine?
+<div class="overlay">
+  <div class="card" id="card">
+    <p class="sub" id="subtitle">Compatibility confirmed: 100% 💘</p>
+    <div class="q" id="question">Do you want to be <span>Hardik’s</span> Valentine?</div>
+    <div class="count" id="countBox">Answering in <span id="countNum">3</span>…</div>
+    <div class="row">
+      <button id="yes">YES 💖</button>
+      <button id="no">No 🙈</button>
+    </div>
   </div>
-
-  <div class="count" id="countBox">
-    Answering in <span id="countNum">3</span>…
-  </div>
-
-  <div class="row">
-    <button id="yes">YES 💖</button>
-    <button id="no">No 🙈</button>
-  </div>
-
 </div>
 
 <script>
+  // ---- CONFIG ----
+  const TOTAL_PICS = 14;
+  const SHOW_COUNT = 10;          // how many to slam onto this page (change if you want 14)
+  const SLAM_GAP_MS = 110;        // time between slams
+  const CARD_SHOW_MS = 1400;      // when the question appears
+  // ----------------
 
-const n1 = localStorage.getItem("v1") || "Hardik";
-const n2 = localStorage.getItem("v2") || "my love";
+  // Names
+  const n1 = localStorage.getItem("v1") || "Hardik";
+  const n2 = localStorage.getItem("v2") || "my love";
+  document.getElementById("subtitle").textContent = `Compatibility confirmed: ${n1} + ${n2} = 100% 💘`;
+  document.getElementById("question").innerHTML = `Do you want to be <span>${n1}’s</span> Valentine?`;
 
-document.getElementById("subtitle").textContent =
-  `Compatibility confirmed: ${n1} + ${n2} = 100% 💘`;
+  // Build random montage
+  const montage = document.getElementById("montage");
 
-document.getElementById("question").innerHTML =
-  `Do you want to be <span>${n1}’s</span> Valentine?`;
+  // Make an array [1..14], shuffle, take first SHOW_COUNT
+  const pics = Array.from({length: TOTAL_PICS}, (_,i)=>i+1);
+  for(let i=pics.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [pics[i], pics[j]] = [pics[j], pics[i]];
+  }
+  const chosen = pics.slice(0, SHOW_COUNT);
 
-const noBtn = document.getElementById("no");
-const yesBtn = document.getElementById("yes");
-const countNum = document.getElementById("countNum");
-const countBox = document.getElementById("countBox");
+  // helper random
+  const rand = (min,max)=> min + Math.random()*(max-min);
 
+  // positions: spread across inner box in a grid-ish way (prevents full overlap)
+  const spots = [];
+  const cols = 5, rows = 3; // 15 spots
+  for(let r=0;r<rows;r++){
+    for(let c=0;c<cols;c++){
+      spots.push({x: (c+0.5)/cols, y: (r+0.5)/rows});
+    }
+  }
+  // shuffle spots
+  for(let i=spots.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [spots[i], spots[j]] = [spots[j], spots[i]];
+  }
 
-function runAway(){
+  chosen.forEach((num, idx) => {
+    const img = document.createElement("img");
+    img.className = "photo";
+    img.src = `pic${num}.jpg`;
 
-  const pad = 20;
-  const w = 120;
-  const h = 55;
+    // random size (responsive-ish)
+    const w = rand(140, 220);
+    const h = w * rand(1.20, 1.45);
+    img.style.width = w + "px";
+    img.style.height = h + "px";
 
-  const x = pad + Math.random()*(window.innerWidth - w - pad*2);
-  const y = pad + Math.random()*(window.innerHeight - h - pad*2);
+    // choose a spot + add jitter
+    const s = spots[idx % spots.length];
+    const left = (s.x * 100) + rand(-6, 6);
+    const top  = (s.y * 100) + rand(-10, 10);
 
-  noBtn.style.position = "fixed";
-  noBtn.style.left = x + "px";
-  noBtn.style.top = y + "px";
-}
+    img.style.left = `calc(${left}% - ${w/2}px)`;
+    img.style.top  = `calc(${top}% - ${h/2}px)`;
 
-noBtn.addEventListener("mouseover", runAway);
-noBtn.addEventListener("touchstart", e=>{
-  e.preventDefault();
-  runAway();
-},{passive:false});
+    // random rotation vars for slam keyframes
+    img.style.setProperty("--rStart", `${rand(-28, 28)}deg`);
+    img.style.setProperty("--rMid",   `${rand(-10, 10)}deg`);
+    img.style.setProperty("--rEnd",   `${rand(-18, 18)}deg`);
 
+    // stagger slam
+    img.style.animationDelay = (idx * SLAM_GAP_MS) + "ms";
 
-// Countdown
-let t = 3;
-runAway();
+    // shake on each slam start
+    img.addEventListener("animationstart", ()=>{
+      document.body.classList.remove("shake");
+      void document.body.offsetWidth;
+      document.body.classList.add("shake");
+    });
 
-const timer = setInterval(()=>{
+    montage.appendChild(img);
+  });
 
-  t--;
+  // show question on top after montage begins
+  const card = document.getElementById("card");
+  setTimeout(()=>{ card.classList.add("show"); }, CARD_SHOW_MS);
 
-  if(t >= 1){
-    countNum.textContent = t;
+  // Runaway NO + countdown (start after card shows)
+  const noBtn = document.getElementById("no");
+  const yesBtn = document.getElementById("yes");
+  const countNum = document.getElementById("countNum");
+  const countBox = document.getElementById("countBox");
+
+  function runAway(){
+    const pad = 20, w = 120, h = 55;
+    const x = pad + Math.random()*(window.innerWidth - w - pad*2);
+    const y = pad + Math.random()*(window.innerHeight - h - pad*2);
+    noBtn.style.position = "fixed";
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+  }
+  noBtn.addEventListener("mouseover", runAway);
+  noBtn.addEventListener("touchstart", e=>{ e.preventDefault(); runAway(); }, {passive:false});
+
+  setTimeout(()=>{
+    let t = 3;
     runAway();
-  }
-  else{
-    clearInterval(timer);
+    const timer = setInterval(()=>{
+      t--;
+      if(t >= 1){
+        countNum.textContent = t;
+        runAway();
+      } else {
+        clearInterval(timer);
+        countBox.textContent = "Only one real choice 😄";
+        noBtn.style.display = "none";
+        yesBtn.style.minWidth = "240px";
+      }
+    }, 1000);
+  }, CARD_SHOW_MS + 150);
 
-    countBox.textContent = "Only one real choice 😄";
-
-    noBtn.style.display = "none";
-    yesBtn.style.minWidth = "220px";
-  }
-
-},1000);
-
-
-// YES → celebration page
-yesBtn.addEventListener("click", ()=>{
-
-  window.location.href = "celebrate.html";
-
-});
-
+  yesBtn.addEventListener("click", ()=>{ window.location.href = "celebrate.html"; });
 </script>
 
 </body>
