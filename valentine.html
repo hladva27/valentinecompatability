@@ -1,76 +1,228 @@
-<!-- VALENTINE.HTML (JPEG VERSION) -->
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>One Question 💌</title>
+
 <style>
-/* same styling as before, shortened for clarity */
-body{margin:0;font-family:Arial,sans-serif;background:#0b1020;color:#fff;overflow:hidden}
-.montage{position:fixed;inset:0;display:flex;justify-content:center;align-items:center;pointer-events:none;z-index:1}
-.montage-inner{position:relative;width:96vw;height:75vh}
-.photo{position:absolute;border-radius:18px;box-shadow:0 25px 80px #000;opacity:0;
-transform:translateY(-80vh) scale(1.2);animation:slam .6s ease-out forwards}
-@keyframes slam{to{opacity:1;transform:translateY(0) scale(1)}}
-.overlay{position:fixed;inset:0;display:flex;justify-content:center;align-items:center;z-index:3}
-.card{background:rgba(0,0,0,.7);padding:24px;border-radius:22px;text-align:center;
-max-width:600px;width:90%;opacity:0;transition:.5s}
-.card.show{opacity:1}
-button{padding:12px 20px;border-radius:14px;font-weight:700;border:0}
-#yes{background:#ff2d6f;color:#000} #no{background:#fff;color:#ff2d6f}
+  :root{--pink:#ff2d6f;--pink2:#ff7aa8;--bg:#0b1020;}
+  body{
+    margin:0;font-family:Arial,sans-serif;min-height:100vh;overflow:hidden;color:#fff;
+    background:
+      radial-gradient(900px 700px at 20% 15%, rgba(255,45,111,.22), transparent 60%),
+      radial-gradient(900px 700px at 75% 25%, rgba(255,160,200,.18), transparent 60%),
+      var(--bg);
+  }
+
+  /* Wallpaper montage (full-screen) */
+  .wall{
+    position:fixed; inset:0;
+    pointer-events:none;
+    z-index:1;
+  }
+  .photo{
+    position:absolute;
+    border-radius:22px;
+    border:3px solid rgba(255,255,255,.18);
+    box-shadow:0 28px 90px rgba(0,0,0,.60);
+    object-fit:cover;
+    opacity:0;
+    transform: translateY(-60px) rotate(var(--rStart)) scale(1.08);
+    will-change: transform, opacity;
+  }
+
+  /* slower “slam” */
+  @keyframes slamSlow{
+    0%   {opacity:0; transform: translateY(-80px) rotate(var(--rStart)) scale(1.10);}
+    55%  {opacity:1; transform: translateY(10px)  rotate(var(--rMid))   scale(1.01);}
+    78%  {transform: translateY(-6px) rotate(var(--rEnd)) scale(1.00);}
+    100% {opacity:1; transform: translateY(0) rotate(var(--rEnd)) scale(1.00);}
+  }
+
+  /* Contrast layer so text stays readable as photos fill */
+  .shade{
+    position:fixed; inset:0;
+    background:rgba(0,0,0,.28);
+    z-index:2;
+  }
+
+  /* Foreground message */
+  .overlay{
+    position:fixed; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    padding:24px;
+    z-index:3;
+    pointer-events:auto;
+  }
+  .card{
+    width:min(680px,92vw);
+    text-align:center;
+    padding:28px 22px;
+    border-radius:26px;
+    background:rgba(0,0,0,.62);
+    border:1px solid rgba(255,255,255,.20);
+    box-shadow:0 22px 70px rgba(0,0,0,.60);
+    backdrop-filter: blur(10px);
+  }
+
+  .sub{margin:0 0 10px;color:rgba(255,255,255,.86)}
+  .q{font-size:32px;font-weight:1000;line-height:1.12;margin:10px 0 14px;letter-spacing:-.02em}
+  .q span{
+    background:linear-gradient(135deg,var(--pink),var(--pink2));
+    -webkit-background-clip:text;background-clip:text;color:transparent;
+  }
+  .count{
+    display:inline-block;padding:10px 14px;border-radius:999px;
+    background:rgba(255,255,255,.12);border:1px dashed rgba(255,255,255,.28);
+    font-weight:900;margin-bottom:16px
+  }
+  .row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+  button{
+    padding:12px 18px;border-radius:16px;border:0;font-size:16px;font-weight:1000;cursor:pointer;min-width:150px
+  }
+  #yes{background:linear-gradient(135deg,var(--pink),var(--pink2));color:#0b1020;box-shadow:0 16px 34px rgba(255,45,111,.25)}
+  #no{background:rgba(255,255,255,.95);color:var(--pink)}
 </style>
 </head>
 
 <body>
 
-<div class="montage"><div class="montage-inner" id="montage"></div></div>
+<div class="wall" id="wall"></div>
+<div class="shade"></div>
 
 <div class="overlay">
-<div class="card" id="card">
-  <h2 id="q"></h2>
-  <p>Answering in <span id="c">3</span></p>
-  <button id="yes">YES 💖</button>
-  <button id="no">No 🙈</button>
-</div>
+  <div class="card">
+    <p class="sub" id="subtitle">Compatibility confirmed: 100% 💘</p>
+    <div class="q" id="question">Do you want to be <span>Hardik’s</span> Valentine?</div>
+    <div class="count" id="countBox">Answering in <span id="countNum">3</span>…</div>
+    <div class="row">
+      <button id="yes">YES 💖</button>
+      <button id="no">No 🙈</button>
+    </div>
+  </div>
 </div>
 
 <script>
-const TOTAL_PICS = 13;
-const EXT = "jpeg";
+  // ---- SETTINGS ----
+  const TOTAL_PICS = 13;              // pic1..pic13
+  const exts = ["jpeg","jpg"];        // jpeg first, then jpg fallback
+  const BUILD = "v2026-02-07-2";      // change if you want to force cache refresh
+  const SLAM_INTERVAL_MS = 700;       // <-- slower: one photo every 0.7s
+  const SLAM_ANIM_MS = 950;           // slower animation duration
+  const PHOTO_TARGET_COUNT = 11;      // how many photos appear on this page
+  const COUNTDOWN_DELAY_MS = 4200;    // start countdown after some photos have landed
+  // -------------------
 
-const n1 = localStorage.getItem("v1")||"Hardik";
-document.getElementById("q").innerHTML=`Do you want to be <b>${n1}</b>'s Valentine?`;
+  const rand = (min,max)=> min + Math.random()*(max-min);
 
-const montage=document.getElementById("montage");
-let pics=[...Array(TOTAL_PICS)].map((_,i)=>i+1);
-pics.sort(()=>Math.random()-.5);
+  // Names
+  const n1 = localStorage.getItem("v1") || "Hardik";
+  const n2 = localStorage.getItem("v2") || "my love";
+  document.getElementById("subtitle").textContent = `Compatibility confirmed: ${n1} + ${n2} = 100% 💘`;
+  document.getElementById("question").innerHTML = `Do you want to be <span>${n1}’s</span> Valentine?`;
 
-pics.slice(0,9).forEach((n,i)=>{
-  const img=document.createElement("img");
-  img.className="photo";
-  img.src=`pic${n}.${EXT}`;
-  img.style.width=140+Math.random()*80+"px";
-  img.style.left=Math.random()*80+"%";
-  img.style.top=Math.random()*60+"%";
-  img.style.animationDelay=i*120+"ms";
-  montage.appendChild(img);
-});
-
-setTimeout(()=>document.getElementById("card").classList.add("show"),1200);
-
-const no=document.getElementById("no");
-no.onmouseover=()=>{no.style.left=Math.random()*80+"vw";no.style.top=Math.random()*70+"vh";no.style.position="fixed"};
-
-let t=3;
-setInterval(()=>{
-  if(t>1){document.getElementById("c").textContent=--t}
-  else{
-    no.style.display="none";
+  // Helper: src with fallback + cache bust
+  function setPicSrc(img, num, extIndex=0){
+    const ext = exts[extIndex];
+    img.src = `pic${num}.${ext}?build=${encodeURIComponent(BUILD)}&r=${Math.random().toString(16).slice(2)}`;
+    img.onerror = () => {
+      if(extIndex + 1 < exts.length) setPicSrc(img, num, extIndex + 1);
+      else img.style.display = "none";
+    };
   }
-},1000);
 
-document.getElementById("yes").onclick=()=>location.href="celebrate.html";
+  // Choose random pics
+  const pics = Array.from({length: TOTAL_PICS}, (_,i)=>i+1);
+  for(let i=pics.length-1;i>0;i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [pics[i], pics[j]] = [pics[j], pics[i]];
+  }
+  const chosen = pics.slice(0, PHOTO_TARGET_COUNT);
+
+  // Precomputed “wallpaper” zones so images spread across the whole screen
+  const zones = [
+    {x:8,  y:12},{x:38,y:8},{x:70,y:14},
+    {x:12,y:52},{x:44,y:44},{x:78,y:50},
+    {x:18,y:84},{x:52,y:80},{x:84,y:82},
+    {x:6, y:30},{x:88,y:30},{x:30,y:68},{x:66,y:72}
+  ];
+
+  const wall = document.getElementById("wall");
+  let idx = 0;
+
+  function addNextPhoto(){
+    if(idx >= chosen.length) return;
+
+    const num = chosen[idx];
+    const z = zones[idx % zones.length];
+
+    const img = document.createElement("img");
+    img.className = "photo";
+
+    // Larger photos for wallpaper feel
+    const w = rand(240, 360);
+    const h = w * rand(1.05, 1.35);
+    img.style.width = w + "px";
+    img.style.height = h + "px";
+
+    // Position across the entire viewport (percent-based)
+    img.style.left = `calc(${z.x}% - ${w/2}px)`;
+    img.style.top  = `calc(${z.y}% - ${h/2}px)`;
+
+    // Rotations
+    img.style.setProperty("--rStart", `${rand(-22, 22)}deg`);
+    img.style.setProperty("--rMid",   `${rand(-8, 8)}deg`);
+    img.style.setProperty("--rEnd",   `${rand(-14, 14)}deg`);
+
+    // Apply slow slam animation
+    img.style.animation = `slamSlow ${SLAM_ANIM_MS}ms cubic-bezier(.2,1.2,.25,1) forwards`;
+
+    setPicSrc(img, num);
+    wall.appendChild(img);
+
+    idx++;
+    setTimeout(addNextPhoto, SLAM_INTERVAL_MS);
+  }
+
+  // Start slamming photos slowly
+  addNextPhoto();
+
+  // Countdown + runaway no
+  const noBtn = document.getElementById("no");
+  const yesBtn = document.getElementById("yes");
+  const countNum = document.getElementById("countNum");
+  const countBox = document.getElementById("countBox");
+
+  function runAway(){
+    const pad = 20, w = 120, h = 55;
+    const x = pad + Math.random()*(window.innerWidth - w - pad*2);
+    const y = pad + Math.random()*(window.innerHeight - h - pad*2);
+    noBtn.style.position = "fixed";
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+  }
+  noBtn.addEventListener("mouseover", runAway);
+  noBtn.addEventListener("touchstart", e=>{ e.preventDefault(); runAway(); }, {passive:false});
+
+  setTimeout(()=>{
+    let t = 3;
+    runAway();
+    const timer = setInterval(()=>{
+      t--;
+      if(t >= 1){
+        countNum.textContent = t;
+        runAway();
+      } else {
+        clearInterval(timer);
+        countBox.textContent = "Only one real choice 😄";
+        noBtn.style.display = "none";
+        yesBtn.style.minWidth = "240px";
+      }
+    }, 1000);
+  }, COUNTDOWN_DELAY_MS);
+
+  yesBtn.addEventListener("click", ()=>{ window.location.href = "celebrate.html"; });
 </script>
 
 </body>
